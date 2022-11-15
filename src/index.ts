@@ -26,22 +26,26 @@
 const nextick: (callback: VoidFunction) => void = (() => {
 
   if (typeof process === 'object' && typeof process.nextTick === 'function') {
-    return (cb) => { process.nextTick(cb); };
+    return (cb) => { process.nextTick(() => cb()); };
+  }
+  
+  if (typeof requestAnimationFrame === "function") {
+    return (cb) => { requestAnimationFrame(() => cb()); };
   }
 
   if (typeof queueMicrotask === "function") {
-    return (cb) => { queueMicrotask(cb); };
+    return (cb) => { queueMicrotask(() => cb()); };
   }
 
   if (typeof setImmediate === 'function') {
-    return (cb) => { setImmediate(cb); };
+    return (cb) => { setImmediate(() => cb()); };
   }
 
   if (typeof setTimeout === 'function' || typeof setTimeout === 'object') {
-    return (cb) => { setTimeout(cb, 0); };
+    return (cb) => { setTimeout(() => cb(), 0); };
   }
 
-  return (cb) => { Promise.resolve().then(cb); };
+  return (cb) => { Promise.resolve().then(() => cb()); };
 
 })();
 
