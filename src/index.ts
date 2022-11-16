@@ -23,7 +23,7 @@
 //  THE SOFTWARE.
 //
 
-const nextick: (callback: VoidFunction) => void = (() => {
+export const nextick: (callback: VoidFunction) => void = (() => {
 
   if (typeof process === 'object' && typeof process.nextTick === 'function') {
     return (cb) => { process.nextTick(() => cb()); };
@@ -49,5 +49,4 @@ const nextick: (callback: VoidFunction) => void = (() => {
 
 })();
 
-export { nextick };
 export default nextick;
